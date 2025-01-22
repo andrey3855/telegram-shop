@@ -1,0 +1,207 @@
+/* Базовые стили */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background: #ccffcc;
+    color: #2d3436;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 100%;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* Стартовый экран */
+.start-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+    animation: fadeIn 0.5s ease;
+}
+
+.logo-wrapper {
+    margin-bottom: 40px;
+}
+
+.animated-logo {
+    font-size: 3.5rem;
+    color: #2d3436;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    animation: logoFloat 3s ease-in-out infinite;
+}
+
+/* Кнопки */
+.start-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 80%;
+    max-width: 400px;
+}
+
+.main-btn {
+    padding: 18px 30px;
+    border: none;
+    border-radius: 30px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.main-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.shop-btn {
+    background: #ff7675;
+    color: white;
+}
+
+.fly-btn {
+    background: #74b9ff;
+    color: white;
+}
+
+/* Навигация */
+.nav-buttons {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-around;
+    backdrop-filter: blur(5px);
+    border-top: 1px solid rgba(0,0,0,0.1);
+}
+
+.nav-btn {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 25px;
+    background: #a8edea;
+    color: #2d3436;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.nav-btn:hover {
+    background: #74b9ff;
+    color: white;
+    transform: scale(1.05);
+}
+
+/* Контент */
+#main-content {
+    position: relative;
+    padding-bottom: 80px;
+}
+
+.app-title {
+    text-align: center;
+    color: #2d3436;
+    margin: 20px 0;
+    font-size: 2rem;
+}
+
+/* Категории и товары */
+.categories-menu {
+    display: grid;
+    gap: 15px;
+    padding: 20px;
+}
+
+.category-btn {
+    padding: 20px;
+    border: none;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #2d3436;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
+
+.category-btn:hover {
+    background: #ff7675;
+    color: white;
+    transform: translateY(-3px);
+}
+
+.product-list {
+    display: grid;
+    gap: 20px;
+    padding: 20px;
+}
+
+.product-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    padding: 20px;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.product-title {
+    color: #ff7675;
+    margin-bottom: 10px;
+    font-size: 1.3rem;
+}
+
+/* Корзина */
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    margin: 10px 0;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Анимации */
+@keyframes logoFloat {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes buttonPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}

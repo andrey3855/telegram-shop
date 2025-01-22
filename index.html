@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>wazup! shop</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div id="start-screen" class="start-screen">
+            <div class="logo-wrapper">
+                <div class="animated-logo">🛩️ wazup!</div>
+            </div>
+            <div class="start-buttons">
+                <button class="main-btn shop-btn" onclick="showCategories()">🛍️ Открыть магазин</button>
+                <button class="main-btn fly-btn" onclick="showFlightInfo()">🚀 Начать летать</button>
+            </div>
+        </div>
+
+        <div id="main-content" style="display: none;">
+            <header>
+                <button class="back-btn" onclick="showStartScreen()">⌂ Главная</button>
+                <h1 class="app-title">wazup! shop</h1>
+            </header>
+            
+            <div id="content"></div>
+            
+            <footer class="nav-buttons">
+                <button class="nav-btn" onclick="showCategories()">🗂️ Каталог</button>
+                <button class="nav-btn cart-counter" onclick="showCart()">🛒 Корзина</button>
+            </footer>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
