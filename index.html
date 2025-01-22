@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Мой магазин</title>
+    <title>wazup! shop</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
@@ -9,8 +9,27 @@
 </head>
 <body>
     <div class="container">
-        <h1>Добро пожаловать в магазин! 🛍️</h1>
-        <div id="products"></div>
+        <!-- Стартовый экран -->
+        <div id="start-screen" class="start-screen">
+            <img src="logo.png" alt="wazup! shop" class="main-logo">
+            <div class="start-buttons">
+                <button class="main-btn shop-btn" onclick="showCategories()">🛒 Магазин</button>
+                <button class="main-btn fly-btn" onclick="showFlightInfo()">✈️ Начать летать</button>
+            </div>
+        </div>
+
+        <!-- Основной контент (будет скрыт сначала) -->
+        <div id="main-content" style="display: none;">
+            <header>
+                <h1>wazup! shop</h1>
+                <button class="back-btn" onclick="showStartScreen()">← Назад</button>
+            </header>
+            <div id="content"></div>
+            <footer class="nav-buttons">
+                <button onclick="showStartScreen()">Главная</button>
+                <button onclick="showCart()">Корзина (${cart.length})</button>
+            </footer>
+        </div>
     </div>
     <script src="app.js"></script>
 </body>
