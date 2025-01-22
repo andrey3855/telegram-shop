@@ -1,0 +1,123 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f5f5f5;
+}
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+.product {
+    background: white;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.start-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+}
+
+.main-logo {
+    width: 200px;
+    margin-bottom: 40px;
+    animation: float 3s ease-in-out infinite;
+}
+
+.start-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 80%;
+}
+
+.main-btn {
+    padding: 18px;
+    border: none;
+    border-radius: 25px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: transform 0.3s, opacity 0.3s;
+}
+
+.main-btn:hover {
+    transform: scale(1.05);
+}
+
+.shop-btn {
+    background: #ff69b4;
+    color: white;
+}
+
+.fly-btn {
+    background: #00b4d8;
+    color: white;
+}
+
+.back-btn {
+    background: none;
+    border: none;
+    color: #ff69b4;
+    font-size: 1.1em;
+    cursor: pointer;
+    position: absolute;
+    left: 15px;
+    top: 15px;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+    100% { transform: translateY(0px); }
+}
+
+/* Добавляем стили для секции полетов */
+.flight-info {
+    padding: 20px;
+    text-align: center;
+}
+
+.flight-info img {
+    width: 150px;
+    margin: 20px 0;
+}
+/* Добавляем новые стили для категорий */
+.categories-menu {
+    display: grid;
+    gap: 15px;
+    padding: 20px;
+}
+
+.category-btn {
+    padding: 18px;
+    border: none;
+    border-radius: 25px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: transform 0.3s;
+    background: #ff69b4;
+    color: white;
+    text-align: center;
+}
+
+.category-btn:hover {
+    transform: scale(1.02);
+}
+
+.product-card {
+    background: #1a1a1a;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.product-title {
+    color: #ff69b4;
+    margin: 10px 0;
+}
