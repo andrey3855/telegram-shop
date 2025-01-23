@@ -1,5 +1,4 @@
 const tg = window.Telegram.WebApp;
-let currentView = 'start';
 let cart = [];
 
 const products = {
@@ -26,20 +25,14 @@ const products = {
 };
 
 function showStartScreen() {
-    currentView = 'start';
     document.getElementById('start-screen').style.display = 'flex';
     document.getElementById('main-content').style.display = 'none';
     updateCartCounter();
 }
 
-function showMainContent() {
+function showCategories() {
     document.getElementById('start-screen').style.display = 'none';
     document.getElementById('main-content').style.display = 'block';
-}
-
-function showCategories() {
-    showMainContent();
-    currentView = 'categories';
     const content = document.getElementById('content');
     content.innerHTML = `
         <div class="categories-menu">
@@ -53,25 +46,21 @@ function showCategories() {
 }
 
 function showCategory(category) {
-    currentView = category;
     const items = category === 'all' 
         ? Object.values(products).flat() 
         : products[category];
     
     const content = document.getElementById('content');
     content.innerHTML = `
-        <h2 class="category-title">${getCategoryTitle(category)}</h2>
+        <h2>${getCategoryTitle(category)}</h2>
         <div class="product-list">
             ${items.map(item => `
                 <div class="product-card">
-                    <h3 class="product-title">${item.name}</h3>
-                    <p class="product-description">${item.description}</p>
-                    <p class="product-price">💵 ${item.price.toLocaleString()} ₽</p>
-                    <button 
-                        class="main-btn shop-btn" 
-                        onclick="addToCart(${item.id})"
-                    >
-                        🛒 Добавить в корзину
+                    <h3>${item.name}</h3>
+                    <p>${item.description}</p>
+                    <p>💵 ${item.price.toLocaleString()} ₽</p>
+                    <button class="main-btn shop-btn" onclick="addToCart(${item.id})">
+                        🛒 Добавить
                     </button>
                 </div>
             `).join('')}
@@ -79,127 +68,99 @@ function showCategory(category) {
     `;
 }
 
-function getCategoryTitle(category) {
-    const titles = {
-        all: 'Весь ассортимент',
-        drones: 'Дроны',
-        propellers: 'Пропеллеры',
-        merch: 'Фирменный мерч',
-        batteries: 'Аккумуляторы'
-    };
-    return titles[category] || 'Категория';
-}
-
 function addToCart(productId) {
     const allProducts = Object.values(products).flat();
     const product = allProducts.find(p => p.id === productId);
-    
-    if (product) {
-        cart.push(product);
-        updateCartCounter();
-        tg.showAlert(`✅ "${product.name}" добавлен в корзину!`);
-        animateCartButton();
-    }
-}
-
-function animateCartButton() {
-    const cartBtn = document.querySelector('.cart-counter');
-    cartBtn.classList.add('pulse');
-    setTimeout(() => cartBtn.classList.remove('pulse'), 500);
+    cart.push(product);
+    updateCartCounter();
+    tg.showAlert(`✅ "${product.name}" добавлен в корзину!`);
 }
 
 function showCart() {
-    currentView = 'cart';
     const content = document.getElementById('content');
     content.innerHTML = `
         <div class="cart-content">
-            <h2 class="cart-title">🛒 Ваша корзина</h2>
+            <h2>🛒 Ваша корзина</h2>
             ${cart.length === 0 
-                ? '<p class="empty-cart">Корзина пуста</p>' 
+                ? '<p>Корзина пуста</p>' 
                 : cart.map((item, index) => `
                     <div class="cart-item">
                         <div>
                             <h3>${item.name}</h3>
-                            <p>${item.description}</p>
-                            <p class="price">${item.price.toLocaleString()} ₽</p>
+                            <p>${item.price.toLocaleString()} ₽</p>
                         </div>
-                        <button 
-                            class="nav-btn" 
-                            onclick="removeFromCart(${index})"
-                            style="background: #ff7675;"
-                        >
+                        <button class="nav-btn" onclick="removeFromCart(${index})">
                             ❌ Удалить
                         </button>
                     </div>
                 `).join('')}
             ${cart.length > 0 ? `
-                <div class="total-section">
-                    <h3>Итого: ${calculateTotal().toLocaleString()} ₽</h3>
-                    <button class="main-btn shop-btn" onclick="checkout()">
-                        💳 Оформить заказ
-                    </button>
-                </div>
+                <button class="main-btn shop-btn" onclick="checkout()">
+                    💳 Оформить (${cart.reduce((sum, item) => sum + item.price, 0).toLocaleString()} ₽)
+                </button>
             ` : ''}
         </div>
     `;
 }
 
-function removeFromCart(index) {
-    cart.splice(index, 1);
-    updateCartCounter();
-    showCart();
+function checkout() {
+    const content = document.getElementById('content');
+    content.innerHTML = `
+        <div class="order-form">
+            <h2>📦 Оформление заказа</h2>
+            <form onsubmit="submitOrder(event)">
+                <div class="form-group">
+                    <label>Ваш Telegram @</label>
+                    <input type="text" id="telegram" required pattern="@\w+">
+                </div>
+                <div class="form-group">
+                    <label>Телефон</label>
+                    <input type="tel" id="phone" required pattern="\+7\d{10}">
+                </div>
+                <div class="form-group">
+                    <label>Адрес доставки</label>
+                    <textarea id="address" required></textarea>
+                </div>
+                <button type="submit" class="main-btn shop-btn">
+                    ✅ Подтвердить заказ
+                </button>
+            </form>
+        </div>
+    `;
 }
 
-function calculateTotal() {
-    return cart.reduce((sum, item) => sum + item.price, 0);
+function submitOrder(event) {
+    event.preventDefault();
+    const telegram = document.getElementById('telegram').value;
+    const phone = document.getElementById('phone').value;
+    const address = document.getElementById('address').value;
+
+    const orderData = {
+        telegram,
+        phone,
+        address,
+        items: cart,
+        total: cart.reduce((sum, item) => sum + item.price, 0)
+    };
+
+    tg.sendData(JSON.stringify({
+        message: `Новый заказ!\n\nКлиент: ${telegram}\nТелефон: ${phone}\nАдрес: ${address}\nТовары: ${cart.map(i => i.name).join(', ')}\nИтого: ${orderData.total}₽`,
+        recipient: '@SSmig'
+    }));
+    
+    cart = [];
+    updateCartCounter();
+    tg.showAlert("Заказ оформлен! Мы свяжемся с вами в Telegram.");
+    tg.close();
 }
 
 function updateCartCounter() {
     const counter = document.querySelector('.cart-counter');
     if (counter) {
-        counter.innerHTML = `🛒 Корзина ${cart.length > 0 ? `(${cart.length})` : ''}`;
+        counter.textContent = `🛒 Корзина (${cart.length})`;
     }
 }
 
-function checkout() {
-    if (cart.length === 0) {
-        tg.showAlert("Корзина пуста!");
-        return;
-    }
-    
-    const data = {
-        items: cart,
-        total: calculateTotal(),
-        timestamp: new Date().toISOString()
-    };
-    
-    tg.sendData(JSON.stringify(data));
-    tg.close();
-}
-
-function showFlightInfo() {
-    currentView = 'flights';
-    const content = document.getElementById('content');
-    content.innerHTML = `
-        <div class="flight-info">
-            <h2>🚁 Авиаклуб "wazup! fly"</h2>
-            <div class="flight-features">
-                <p>🎯 Профессиональное обучение</p>
-                <p>🏅 Сертифицированные инструкторы</p>
-                <p>🌏 Полетные зоны по всему миру</p>
-            </div>
-            <button 
-                class="main-btn fly-btn" 
-                onclick="window.open('https://t.me/wazup_crew_bot')"
-            >
-                ✈️ Записаться на полет
-            </button>
-        </div>
-    `;
-}
-
-// Инициализация
 tg.ready();
 tg.expand();
-tg.enableClosingConfirmation();
 showStartScreen();
