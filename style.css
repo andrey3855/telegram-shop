@@ -222,3 +222,63 @@ body {
     from { opacity: 0; transform: translateY(50px); }
     to { opacity: 1; transform: translateY(0); }
 }
+/* Добавить в конец файла */
+.order-form {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 25px;
+    margin: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 18px 25px;
+    border: none;
+    border-radius: 15px;
+    background: #74b9ff;
+    color: white;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.form-input::placeholder {
+    color: rgba(255,255,255,0.8);
+}
+
+.form-input:focus {
+    background: #ff7675;
+    outline: none;
+    transform: translateY(-2px);
+}
+
+.form-input.error {
+    background: #ff4444;
+    animation: shake 0.5s;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 12px;
+    color: #2d3436;
+    font-weight: 500;
+    padding-left: 10px;
+}
+
+.form-note {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 8px;
+    padding-left: 10px;
+}
