@@ -95,12 +95,82 @@ body {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+.nav-btn:hover {
+    background: #74b9ff;
+    color: white;
+    transform: scale(1.05);
+}
+
+#main-content {
+    position: relative;
+    padding-bottom: 80px;
+}
+
+.app-title {
+    text-align: center;
+    color: #2d3436;
+    margin: 20px 0;
+    font-size: 2rem;
+}
+
+.categories-menu {
+    display: grid;
+    gap: 15px;
+    padding: 20px;
+}
+
+.category-btn {
+    padding: 20px;
+    border: none;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #2d3436;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
+
+.category-btn:hover {
+    background: #ff7675;
+    color: white;
+    transform: translateY(-3px);
+}
+
+.product-list {
+    display: grid;
+    gap: 20px;
+    padding: 20px;
+}
+
 .product-card {
     background: rgba(255, 255, 255, 0.95);
     border-radius: 15px;
     padding: 20px;
     transition: all 0.3s ease;
     box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.product-title {
+    color: #ff7675;
+    margin-bottom: 10px;
+    font-size: 1.3rem;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    margin: 10px 0;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .order-form {
@@ -125,15 +195,9 @@ body {
     transition: border-color 0.3s ease;
 }
 
-@keyframes logoFloat {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-    100% { transform: translateY(0px); }
-}
-
-@keyframes slideUp {
-    from { opacity: 0; transform: translateY(50px); }
-    to { opacity: 1; transform: translateY(0); }
+.form-input:focus {
+    border-color: #74b9ff;
+    outline: none;
 }
 
 .error-message {
@@ -141,4 +205,20 @@ body {
     font-size: 0.9rem;
     margin-top: 5px;
     display: none;
+}
+
+@keyframes logoFloat {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(50px); }
+    to { opacity: 1; transform: translateY(0); }
 }
