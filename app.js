@@ -247,3 +247,103 @@ tg.ready();
 tg.expand();
 tg.enableClosingConfirmation();
 showStartScreen();
+function checkout() {
+    if (cart.length === 0) {
+        tg.showAlert("Корзина пуста!");
+        return;
+    }
+    
+    const content = document.getElementById('content');
+    content.innerHTML = `
+        <div class="order-form">
+            <h2 style="color: #2d3436; text-align: center; margin-bottom: 30px;">🚚 Данные для доставки</h2>
+            
+            <div class="order-summary" style="
+                background: #ff7675;
+                border-radius: 15px;
+                padding: 20px;
+                margin-bottom: 30px;
+                color: white;
+            ">
+                <h3>Ваш заказ (${cart.length} товаров)</h3>
+                <p>💰 Итого: ${calculateTotal().toLocaleString()} ₽</p>
+            </div>
+
+            <form id="orderForm" onsubmit="submitOrder(event)">
+                <div class="form-group">
+                    <input 
+                        type="tel" 
+                        id="phone" 
+                        class="form-input"
+                        placeholder="+7 (999) 123-45-67"
+                        required
+                        pattern="\+7\s?[\(]?[0-9]{3}[\)]?\s?\d{3}[-]?\d{2}[-]?\d{2}"
+                    >
+                    <div class="form-note">Пример: +7 (999) 123-45-67</div>
+                </div>
+
+                <div class="form-group">
+                    <textarea 
+                        id="address" 
+                        class="form-input"
+                        rows="3"
+                        placeholder="Введите полный адрес доставки"
+                        required
+                        style="resize: none; height: 120px;"
+                    ></textarea>
+                    <div class="form-note">Город, улица, дом, квартира</div>
+                </div>
+
+                <button 
+                    type="submit" 
+                    class="main-btn shop-btn"
+                    style="width: 100%; margin-top: 20px; font-size: 1.2rem;"
+                >
+                    🚀 Подтвердить заказ
+                </button>
+            </form>
+        </div>
+    `;
+}
+
+function submitOrder(event) {
+    event.preventDefault();
+    
+    const form = event.target;
+    const phone = form.querySelector('#phone').value;
+    const address = form.querySelector('#address').value;
+
+    // Валидация телефона
+    const phonePattern = /^\+7\s?[\(]?[0-9]{3}[\)]?\s?\d{3}[-]?\d{2}[-]?\d{2}$/;
+    if (!phonePattern.test(phone)) {
+        form.querySelector('#phone').classList.add('error');
+        return;
+    }
+
+    // Валидация адреса
+    if (address.trim().length < 15) {
+        form.querySelector('#address').classList.add('error');
+        return;
+    }
+
+    // Формирование сообщения
+    const message = `📦 Новый заказ!\n\n` +
+        `📱 Телефон: ${phone}\n` +
+        `🏠 Адрес: ${address}\n\n` +
+        `🛒 Товары:\n${cart.map(item => `• ${item.name} - ${item.price.toLocaleString()}₽`).join('\n')}\n\n` +
+        `💰 Итого: ${calculateTotal().toLocaleString()}₽`;
+
+    // Отправка данных
+    tg.sendData(JSON.stringify({
+        message: message,
+        recipient: '@SSmig'
+    }));
+    
+    // Очистка корзины
+    cart = [];
+    updateCartCounter();
+    
+    // Уведомление пользователю
+    tg.showAlert("✅ Заказ успешно оформлен! Курьер свяжется с вами в течение 15 минут.");
+    tg.close();
+}
