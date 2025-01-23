@@ -6,9 +6,10 @@
 
 body {
     font-family: 'Roboto', sans-serif;
-    background: #ccffcc;
-    color: #2d3436;
+    background: #000000;
+    color: #ffffff;
     line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
 }
 
 .container {
@@ -17,202 +18,115 @@ body {
     padding: 20px;
 }
 
-.start-screen {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    text-align: center;
-    animation: fadeIn 0.5s ease;
+/* Единый стиль для всех иконок */
+button img, .main-btn img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
 }
 
-.logo-wrapper {
-    margin-bottom: 40px;
-}
-
-.animated-logo {
-    font-size: 3.5rem;
-    color: #2d3436;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-    animation: logoFloat 3s ease-in-out infinite;
-}
-
-.main-btn {
+/* Обновленные кнопки с неоновым эффектом */
+button, .main-btn {
     padding: 18px 30px;
     border: none;
-    border-radius: 30px;
-    font-size: 1.2rem;
+    border-radius: 15px;
+    font-size: 1.1rem;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: #ff00bb;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(255, 0, 187, 0.3);
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 10px;
+    gap: 12px;
+    margin: 8px 0;
 }
 
-.main-btn:hover {
+button:hover, .main-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    box-shadow: 0 0 25px rgba(255, 0, 187, 0.5),
+                inset 0 0 10px rgba(255, 255, 255, 0.2);
 }
 
-.shop-btn {
-    background: #ff7675;
-    color: white;
-}
-
-.fly-btn {
-    background: #74b9ff;
-    color: white;
-}
-
+/* Навигационные кнопки */
 .nav-buttons {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(0, 0, 0, 0.9);
     padding: 15px 20px;
     display: flex;
     justify-content: space-around;
-    backdrop-filter: blur(5px);
-    border-top: 1px solid rgba(0,0,0,0.1);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .nav-btn {
     padding: 12px 25px;
-    border: none;
-    border-radius: 25px;
-    background: #a8edea;
-    color: #2d3436;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-radius: 12px;
+    font-size: 0.95rem;
+    width: 48%;
 }
 
-.nav-btn:hover {
-    background: #74b9ff;
-    color: white;
-    transform: scale(1.05);
-}
-
-#main-content {
-    position: relative;
-    padding-bottom: 80px;
-}
-
-.app-title {
-    text-align: center;
-    color: #2d3436;
-    margin: 20px 0;
-    font-size: 2rem;
-}
-
-.categories-menu {
-    display: grid;
-    gap: 15px;
-    padding: 20px;
-}
-
-.category-btn {
-    padding: 20px;
-    border: none;
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0.9);
-    color: #2d3436;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-}
-
-.category-btn:hover {
-    background: #ff7675;
-    color: white;
-    transform: translateY(-3px);
-}
-
-.product-list {
-    display: grid;
-    gap: 20px;
-    padding: 20px;
-}
-
+/* Карточки товаров */
 .product-card {
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
     padding: 20px;
     transition: all 0.3s ease;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .product-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 10px 30px rgba(255, 0, 187, 0.2);
 }
 
-.product-title {
-    color: #ff7675;
-    margin-bottom: 10px;
-    font-size: 1.3rem;
-}
-
-.cart-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px;
-    margin: 10px 0;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.order-form {
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 15px;
-    padding: 20px;
-    margin: 20px 0;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-    animation: slideUp 0.5s ease;
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
+/* Формы */
 .form-input {
-    width: 100%;
-    padding: 12px;
-    border: 2px solid #ccffcc;
-    border-radius: 10px;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 2px solid rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+    transition: all 0.3s ease;
 }
 
 .form-input:focus {
-    border-color: #74b9ff;
-    outline: none;
+    border-color: #ff00bb !important;
+    box-shadow: 0 0 15px rgba(255, 0, 187, 0.3) !important;
 }
 
-.error-message {
-    color: #ff7675;
-    font-size: 0.9rem;
-    margin-top: 5px;
-    display: none;
+/* Анимации */
+@keyframes neonPulse {
+    0% { opacity: 0.8; }
+    50% { opacity: 1; }
+    100% { opacity: 0.8; }
 }
 
-@keyframes logoFloat {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-    100% { transform: translateY(0px); }
+.animated-logo {
+    animation: neonPulse 1.5s ease-in-out infinite;
+    color: #ff00bb;
+    text-shadow: 0 0 15px rgba(255, 0, 187, 0.5);
 }
 
+/* Адаптивность */
+@media (max-width: 768px) {
+    .product-card {
+        padding: 15px;
+    }
+    
+    .main-btn {
+        padding: 15px 25px;
+        font-size: 1rem;
+    }
+}
+
+/* Оптимизированные анимации */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
@@ -220,186 +134,5 @@ body {
 
 @keyframes slideUp {
     from { opacity: 0; transform: translateY(50px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-/* Добавить в конец файла */
-.order-form {
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 20px;
-    padding: 25px;
-    margin: 20px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-
-.form-group {
-    margin-bottom: 25px;
-}
-
-.form-input {
-    width: 100%;
-    padding: 18px 25px;
-    border: none;
-    border-radius: 15px;
-    background: #74b9ff;
-    color: white;
-    font-size: 1.1rem;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-.form-input::placeholder {
-    color: rgba(255,255,255,0.8);
-}
-
-.form-input:focus {
-    background: #ff7675;
-    outline: none;
-    transform: translateY(-2px);
-}
-
-.form-input.error {
-    background: #ff4444;
-    animation: shake 0.5s;
-}
-
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-8px); }
-    75% { transform: translateX(8px); }
-}
-
-.form-label {
-    display: block;
-    margin-bottom: 12px;
-    color: #2d3436;
-    font-weight: 500;
-    padding-left: 10px;
-}
-
-.form-note {
-    font-size: 0.9rem;
-    color: #666;
-    margin-top: 8px;
-    padding-left: 10px;
-}
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: 'Roboto', sans-serif;
-    background: #ccffcc;
-    color: #2d3436;
-    line-height: 1.6;
-}
-
-.container {
-    max-width: 100%;
-    min-height: 100vh;
-    padding: 20px;
-}
-
-/* Стартовый экран */
-.start-screen {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    text-align: center;
-    animation: fadeIn 0.5s ease;
-}
-
-.logo-wrapper {
-    margin-bottom: 40px;
-}
-
-.animated-logo {
-    font-size: 3.5rem;
-    color: #2d3436;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-    animation: logoFloat 3s ease-in-out infinite;
-}
-
-/* Общие стили кнопок */
-.main-btn {
-    padding: 18px 30px;
-    border: none;
-    border-radius: 30px;
-    font-size: 1.2rem;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin: 10px 0;
-}
-
-.main-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
-
-/* Конкретные стили кнопок */
-.shop-btn {
-    background: #ff7675;
-    color: white;
-}
-
-.fly-btn {
-    background: #74b9ff;
-    color: white;
-}
-
-.back-btn {
-    background: #a8edea;
-    color: #2d3436;
-    padding: 12px 25px;
-    font-size: 1rem;
-}
-
-.nav-btn {
-    background: #a8edea;
-    color: #2d3436;
-    width: 48%;
-}
-
-/* Остальные стили */
-.app-title {
-    text-align: center;
-    color: #2d3436;
-    margin: 20px 0;
-    font-size: 2rem;
-}
-
-.product-card {
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 15px;
-    padding: 20px;
-    transition: all 0.3s ease;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-}
-
-.order-form {
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 20px;
-    padding: 25px;
-    margin: 20px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-
-/* Анимации */
-@keyframes logoFloat {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-    100% { transform: translateY(0px); }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
 }
