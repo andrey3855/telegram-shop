@@ -1,5 +1,4 @@
 const tg = window.Telegram.WebApp;
-let currentView = 'start';
 let cart = [];
 
 const products = {
@@ -25,52 +24,39 @@ const products = {
     ]
 };
 
+// Основные функции
 function showStartScreen() {
-    currentView = 'start';
     document.getElementById('start-screen').style.display = 'flex';
     document.getElementById('main-content').style.display = 'none';
     updateCartCounter();
 }
 
-function showMainContent() {
+function showCategories() {
     document.getElementById('start-screen').style.display = 'none';
     document.getElementById('main-content').style.display = 'block';
-}
-
-function showCategories() {
-    showMainContent();
-    currentView = 'categories';
     const content = document.getElementById('content');
     content.innerHTML = `
         <div class="categories-menu">
-            <button class="category-btn" onclick="showCategory('all')">🌟 Весь ассортимент</button>
-            <button class="category-btn" onclick="showCategory('drones')">🚁 Дроны</button>
-            <button class="category-btn" onclick="showCategory('propellers')">🌀 Пропеллеры</button>
-            <button class="category-btn" onclick="showCategory('merch')">👕 Мерч</button>
-            <button class="category-btn" onclick="showCategory('batteries')">🔋 Аккумуляторы</button>
+            ${Object.entries(products).map(([key, items]) => `
+                <button class="main-btn shop-btn" onclick="showCategory('${key}')">
+                    ${getCategoryTitle(key)}
+                </button>
+            `).join('')}
         </div>
     `;
 }
 
 function showCategory(category) {
-    currentView = category;
-    const items = category === 'all' 
-        ? Object.values(products).flat() 
-        : products[category];
-    
+    const items = products[category];
     const content = document.getElementById('content');
     content.innerHTML = `
-        <h2 class="category-title">${getCategoryTitle(category)}</h2>
         <div class="product-list">
             ${items.map(item => `
                 <div class="product-card">
-                    <h3 class="product-title">${item.name}</h3>
-                    <p class="product-description">${item.description}</p>
-                    <p class="product-price">💵 ${item.price.toLocaleString()} ₽</p>
-                    <button 
-                        class="main-btn shop-btn" 
-                        onclick="addToCart(${item.id})"
-                    >
+                    <h3>${item.name}</h3>
+                    <p>${item.description}</p>
+                    <p>💵 ${item.price.toLocaleString()} ₽</p>
+                    <button class="main-btn shop-btn" onclick="addToCart(${item.id})">
                         🛒 Добавить в корзину
                     </button>
                 </div>
@@ -79,114 +65,47 @@ function showCategory(category) {
     `;
 }
 
-function getCategoryTitle(category) {
-    const titles = {
-        all: 'Весь ассортимент',
-        drones: 'Дроны',
-        propellers: 'Пропеллеры',
-        merch: 'Фирменный мерч',
-        batteries: 'Аккумуляторы'
-    };
-    return titles[category] || 'Категория';
-}
-
+// Функции корзины
 function addToCart(productId) {
     const allProducts = Object.values(products).flat();
     const product = allProducts.find(p => p.id === productId);
-    
-    if (product) {
-        cart.push(product);
-        updateCartCounter();
-        tg.showAlert(`✅ "${product.name}" добавлен в корзину!`);
-        animateCartButton();
-    }
-}
-
-function animateCartButton() {
-    const cartBtn = document.querySelector('.cart-counter');
-    cartBtn.classList.add('pulse');
-    setTimeout(() => cartBtn.classList.remove('pulse'), 500);
+    cart.push(product);
+    updateCartCounter();
+    tg.showAlert(`✅ "${product.name}" добавлен в корзину!`);
 }
 
 function showCart() {
-    currentView = 'cart';
     const content = document.getElementById('content');
     content.innerHTML = `
         <div class="cart-content">
-            <h2 class="cart-title">🛒 Ваша корзина</h2>
-            ${cart.length === 0 
-                ? '<p class="empty-cart">Корзина пуста</p>' 
-                : cart.map((item, index) => `
-                    <div class="cart-item">
-                        <div>
-                            <h3>${item.name}</h3>
-                            <p>${item.description}</p>
-                            <p class="price">${item.price.toLocaleString()} ₽</p>
-                        </div>
-                        <button 
-                            class="nav-btn" 
-                            onclick="removeFromCart(${index})"
-                            style="background: #ff7675;"
-                        >
-                            ❌ Удалить
-                        </button>
-                    </div>
-                `).join('')}
-            ${cart.length > 0 ? `
-                <div class="total-section">
-                    <h3>Итого: ${calculateTotal().toLocaleString()} ₽</h3>
-                    <button class="main-btn shop-btn" onclick="checkout()">
-                        💳 Оформить заказ
+            <h2>🛒 Корзина</h2>
+            ${cart.map((item, index) => `
+                <div class="product-card">
+                    <h3>${item.name}</h3>
+                    <p>${item.price.toLocaleString()} ₽</p>
+                    <button class="main-btn shop-btn" onclick="removeFromCart(${index})">
+                        ❌ Удалить
                     </button>
                 </div>
-            ` : ''}
+            `).join('')}
+            ${cart.length > 0 ? `
+                <button class="main-btn shop-btn" onclick="checkout()">
+                    💳 Оформить заказ (${cart.reduce((sum, item) => sum + item.price, 0).toLocaleString()} ₽)
+                </button>
+            ` : '<p>Корзина пуста</p>'}
         </div>
     `;
 }
 
-function removeFromCart(index) {
-    cart.splice(index, 1);
-    updateCartCounter();
-    showCart();
-}
-
-function calculateTotal() {
-    return cart.reduce((sum, item) => sum + item.price, 0);
-}
-
-function updateCartCounter() {
-    const counter = document.querySelector('.cart-counter');
-    if (counter) {
-        counter.innerHTML = `🛒 Корзина ${cart.length > 0 ? `(${cart.length})` : ''}`;
-    }
-}
-
 function checkout() {
-    if (cart.length === 0) {
-        tg.showAlert("Корзина пуста!");
-        return;
-    }
-    
     const content = document.getElementById('content');
     content.innerHTML = `
         <div class="order-form">
             <h2>📦 Оформление заказа</h2>
             <form onsubmit="submitOrder(event)">
-                <div class="form-group">
-                    <label>Telegram @</label>
-                    <input type="text" id="telegram" required pattern="@\w+">
-                </div>
-                <div class="form-group">
-                    <label>Телефон</label>
-                    <input type="tel" id="phone" required pattern="\+7\d{10}">
-                </div>
-                <div class="form-group">
-                    <label>Адрес доставки</label>
-                    <textarea id="address" required></textarea>
-                </div>
-                <button type="submit" class="main-btn shop-btn">
-                    ✅ Подтвердить заказ
-                </button>
+                <input class="main-btn" type="tel" id="phone" placeholder="+7 (999) 123-45-67" required>
+                <textarea class="main-btn" id="address" placeholder="Адрес доставки" required></textarea>
+                <button type="submit" class="main-btn shop-btn">✅ Подтвердить</button>
             </form>
         </div>
     `;
@@ -194,156 +113,45 @@ function checkout() {
 
 function submitOrder(event) {
     event.preventDefault();
-    const telegram = document.getElementById('telegram').value;
     const phone = document.getElementById('phone').value;
     const address = document.getElementById('address').value;
-
+    
     const orderData = {
-        user: { telegram, phone, address },
+        phone: phone,
+        address: address,
         items: cart,
-        total: calculateTotal()
+        total: cart.reduce((sum, item) => sum + item.price, 0)
     };
 
-    const message = `📦 Новый заказ!\n\n` +
-        `👤 Клиент: ${telegram}\n` +
-        `📱 Телефон: ${phone}\n` +
-        `🏠 Адрес: ${address}\n\n` +
-        `🛒 Товары:\n${cart.map(i => `• ${i.name} - ${i.price.toLocaleString()}₽`).join('\n')}\n\n` +
-        `💰 Итого: ${orderData.total.toLocaleString()}₽`;
-
     tg.sendData(JSON.stringify({
-        message: message,
+        message: `Новый заказ!\nТелефон: ${phone}\nАдрес: ${address}\nТовары: ${cart.map(i => i.name).join(', ')}\nИтого: ${orderData.total}₽`,
         recipient: '@SSmig'
     }));
     
     cart = [];
-    updateCartCounter();
-    tg.showAlert("✅ Заказ успешно оформлен! Мы свяжемся с вами в Telegram.");
+    tg.showAlert("✅ Заказ оформлен! Мы свяжемся с вами в течение 15 минут.");
     tg.close();
 }
 
-function showFlightInfo() {
-    currentView = 'flights';
-    const content = document.getElementById('content');
-    content.innerHTML = `
-        <div class="flight-info">
-            <h2>🚁 Авиаклуб "wazup! fly"</h2>
-            <div class="flight-features">
-                <p>🎯 Профессиональное обучение</p>
-                <p>🏅 Сертифицированные инструкторы</p>
-                <p>🌏 Полетные зоны по всему миру</p>
-            </div>
-            <button 
-                class="main-btn fly-btn" 
-                onclick="window.open('https://t.me/wazup_crew_bot')"
-            >
-                ✈️ Записаться на полет
-            </button>
-        </div>
-    `;
+// Вспомогательные функции
+function getCategoryTitle(key) {
+    const titles = {
+        drones: '🚁 Дроны',
+        propellers: '🌀 Пропеллеры',
+        merch: '👕 Мерч',
+        batteries: '🔋 Аккумуляторы'
+    };
+    return titles[key] || 'Категория';
 }
 
+function updateCartCounter() {
+    const counter = document.querySelector('.cart-counter');
+    if (counter) {
+        counter.innerHTML = `🛒 Корзина (${cart.length})`;
+    }
+}
+
+// Инициализация
 tg.ready();
 tg.expand();
-tg.enableClosingConfirmation();
 showStartScreen();
-function checkout() {
-    if (cart.length === 0) {
-        tg.showAlert("Корзина пуста!");
-        return;
-    }
-    
-    const content = document.getElementById('content');
-    content.innerHTML = `
-        <div class="order-form">
-            <h2 style="color: #2d3436; text-align: center; margin-bottom: 30px;">🚚 Данные для доставки</h2>
-            
-            <div class="order-summary" style="
-                background: #ff7675;
-                border-radius: 15px;
-                padding: 20px;
-                margin-bottom: 30px;
-                color: white;
-            ">
-                <h3>Ваш заказ (${cart.length} товаров)</h3>
-                <p>💰 Итого: ${calculateTotal().toLocaleString()} ₽</p>
-            </div>
-
-            <form id="orderForm" onsubmit="submitOrder(event)">
-                <div class="form-group">
-                    <input 
-                        type="tel" 
-                        id="phone" 
-                        class="form-input"
-                        placeholder="+7 (999) 123-45-67"
-                        required
-                        pattern="\+7\s?[\(]?[0-9]{3}[\)]?\s?\d{3}[-]?\d{2}[-]?\d{2}"
-                    >
-                    <div class="form-note">Пример: +7 (999) 123-45-67</div>
-                </div>
-
-                <div class="form-group">
-                    <textarea 
-                        id="address" 
-                        class="form-input"
-                        rows="3"
-                        placeholder="Введите полный адрес доставки"
-                        required
-                        style="resize: none; height: 120px;"
-                    ></textarea>
-                    <div class="form-note">Город, улица, дом, квартира</div>
-                </div>
-
-                <button 
-                    type="submit" 
-                    class="main-btn shop-btn"
-                    style="width: 100%; margin-top: 20px; font-size: 1.2rem;"
-                >
-                    🚀 Подтвердить заказ
-                </button>
-            </form>
-        </div>
-    `;
-}
-
-function submitOrder(event) {
-    event.preventDefault();
-    
-    const form = event.target;
-    const phone = form.querySelector('#phone').value;
-    const address = form.querySelector('#address').value;
-
-    // Валидация телефона
-    const phonePattern = /^\+7\s?[\(]?[0-9]{3}[\)]?\s?\d{3}[-]?\d{2}[-]?\d{2}$/;
-    if (!phonePattern.test(phone)) {
-        form.querySelector('#phone').classList.add('error');
-        return;
-    }
-
-    // Валидация адреса
-    if (address.trim().length < 15) {
-        form.querySelector('#address').classList.add('error');
-        return;
-    }
-
-    // Формирование сообщения
-    const message = `📦 Новый заказ!\n\n` +
-        `📱 Телефон: ${phone}\n` +
-        `🏠 Адрес: ${address}\n\n` +
-        `🛒 Товары:\n${cart.map(item => `• ${item.name} - ${item.price.toLocaleString()}₽`).join('\n')}\n\n` +
-        `💰 Итого: ${calculateTotal().toLocaleString()}₽`;
-
-    // Отправка данных
-    tg.sendData(JSON.stringify({
-        message: message,
-        recipient: '@SSmig'
-    }));
-    
-    // Очистка корзины
-    cart = [];
-    updateCartCounter();
-    
-    // Уведомление пользователю
-    tg.showAlert("✅ Заказ успешно оформлен! Курьер свяжется с вами в течение 15 минут.");
-    tg.close();
-}
